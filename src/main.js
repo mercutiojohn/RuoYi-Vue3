@@ -5,7 +5,15 @@ import Cookies from 'js-cookie'
 import ElementPlus from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn' // 中文语言
 
+/** 重置样式 这里引入自定义的重置样式也可 */
+import '@unocss/reset/tailwind.css'
+/** 
+ *  项目内的样式，
+ *  注意：最好放在重置样式后，uno.css前
+ */
 import '@/assets/styles/index.scss' // global css
+/** 引入uno.css，不引入不生效 */
+import 'virtual:uno.css'
 
 import App from './App'
 import store from './store'

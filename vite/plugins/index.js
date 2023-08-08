@@ -5,8 +5,10 @@ import createSvgIcon from './svg-icon'
 import createCompression from './compression'
 import createSetupExtend from './setup-extend'
 
+import UnoCSS from 'unocss/vite'
+
 export default function createVitePlugins(viteEnv, isBuild = false) {
-    const vitePlugins = [vue()]
+    const vitePlugins = [vue(),UnoCSS()]
     vitePlugins.push(createAutoImport())
 	vitePlugins.push(createSetupExtend())
     vitePlugins.push(createSvgIcon(isBuild))
