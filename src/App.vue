@@ -2,7 +2,7 @@
   <n-config-provider :theme-overrides="themeOverrides">
     <n-message-provider>
       <router-view />
-      <n-global-style />
+      <n-global-style /> <!-- TODO -->
     </n-message-provider>
   </n-config-provider>
 </template>

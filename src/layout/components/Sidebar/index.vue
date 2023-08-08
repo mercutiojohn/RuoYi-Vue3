@@ -11,7 +11,7 @@
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
       <n-menu :options="menuOptions" @update:value="handleUpdateValue" />
-      <el-menu
+      <!-- <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
         :background-color="
@@ -35,7 +35,7 @@
           :item="route"
           :base-path="route.path"
         />
-      </el-menu>
+      </el-menu> -->
     </el-scrollbar>
   </div>
 </template>
