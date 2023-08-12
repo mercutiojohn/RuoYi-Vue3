@@ -1,4 +1,5 @@
 <template>
+  <!-- <n-menu :options="menuOptions" @update:value="handleUpdateValue" :collapsed="isCollapse"/> -->
   <el-menu
     :default-active="activeMenu"
     mode="horizontal"
@@ -20,7 +21,8 @@
           :index="item.path"
           :key="index"
           v-if="index >= visibleNumber"
-          ><svg-icon :icon-class="item.meta.icon" />
+          >
+          <svg-icon :icon-class="item.meta.icon" />
           {{ item.meta.title }}</el-menu-item
         >
       </template>

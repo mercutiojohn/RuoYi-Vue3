@@ -13,9 +13,11 @@ import { handleThemeStyle } from "@/utils/theme";
 import { NConfigProvider, NMessageProvider, NGlobalStyle } from "naive-ui";
 import { defineComponent } from "vue";
 
+const theme = computed(() => settingsStore.theme);
+
 const themeOverrides = {
   common: {
-    primaryColor: "#000000",
+    primaryColor: '#000',
   },
   Button: {
     textColor: "#000000",

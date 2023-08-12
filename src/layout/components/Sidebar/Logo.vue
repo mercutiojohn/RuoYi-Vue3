@@ -41,6 +41,7 @@ const sideTheme = computed(() => settingsStore.sideTheme);
 }
 
 .sidebar-logo-container {
+  display: flex;
   position: relative;
   width: 100%;
   height: 50px;

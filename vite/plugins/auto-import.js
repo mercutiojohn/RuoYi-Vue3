@@ -5,7 +5,15 @@ export default function createAutoImport() {
         imports: [
             'vue',
             'vue-router',
-            'pinia'
+            'pinia',
+            {
+                'naive-ui': [
+                    'useDialog',
+                    'useMessage',
+                    'useNotification',
+                    'useLoadingBar'
+                ]
+            }
         ],
         dts: false
     })

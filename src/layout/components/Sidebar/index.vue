@@ -1,17 +1,31 @@
 <template>
-  <div
-    :class="{ 'has-logo': showLogo }"
+<!-- TODO: 更新侧边栏当前页高亮 -->
+  <n-layout-sider
+    collapse-mode="width"
+    :collapsed-width="49"
+    :width="240"
+    :native-scrollbar="false"
+    :collapsed="isCollapse"
+    show-trigger="bar"
     :style="{
+      padding: 0,
       backgroundColor:
         sideTheme === 'theme-dark'
           ? variables.menuBackground
           : variables.menuLightBackground,
     }"
+    :content-style="{
+      padding: 0
+    }"
+    bordered
+  >
+  <div
+    :class="{ 'has-logo': showLogo }"
   >
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
-      <n-menu :options="menuOptions" @update:value="handleUpdateValue" />
-      <!-- <el-menu
+      <n-menu :options="menuOptions" @update:value="handleUpdateValue" :collapsed="isCollapse"/>
+      <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
         :background-color="
@@ -35,14 +49,17 @@
           :item="route"
           :base-path="route.path"
         />
-      </el-menu> -->
+      </el-menu>
     </el-scrollbar>
   </div>
+  </n-layout-sider>
 </template>
 
 <script setup>
 import { NIcon, NMenu, useMessage } from "naive-ui";
 import { RouterLink } from "vue-router";
+import SvgIcon from '@/components/SvgIcon'
+
 import {
   Book24Regular as BookIcon,
   Person24Regular as PersonIcon,
@@ -74,6 +91,12 @@ const message = useMessage();
 
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
+}
+
+function renderSvgIcon(icon) {
+  return () => h(SvgIcon, {
+    'icon-class': icon
+  }, { default: () => h(icon) });
 }
 
 function handleUpdateValue(key, item) {
@@ -142,7 +165,7 @@ function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
         }
       },
       key: item.name,
-      icon: renderIcon(BookIcon), // TODO
+      icon: renderSvgIcon(item.meta.icon), // TODO
     };
     if (!!item.children) {
       obj.children = [];

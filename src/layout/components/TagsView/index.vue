@@ -1,6 +1,24 @@
 <template>
   <div id="tags-view-container" class="tags-view-container">
     <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
+      <n-tabs
+        v-model:value="currentTag"
+        type="card"
+        closable
+        @close="closeSelectedTag"
+      >
+        <n-tab
+          v-for="tag in visitedViews"
+          :key="tag.path"
+          :tab="tag"
+          :name="tag"
+          :closable="!isAffix(tag)"
+          @click="navigate({ path: tag.path, query: tag.query, fullPath: tag.fullPath })"
+          @contextmenu.prevent="openMenu(tag, $event)"
+        >
+        {{tag.title}}
+        </n-tab>
+      </n-tabs>
       <router-link
         v-for="tag in visitedViews"
         :key="tag.path"
@@ -54,6 +72,7 @@ const left = ref(0);
 const selectedTag = ref({});
 const affixTags = ref([]);
 const scrollPaneRef = ref(null);
+const currentTag = ref({});
 
 const { proxy } = getCurrentInstance();
 const route = useRoute();
@@ -65,6 +84,7 @@ const theme = computed(() => useSettingsStore().theme);
 
 watch(route, () => {
   addTags()
+  updateCurrentTag()
   moveToCurrentTag()
 })
 watch(visible, (value) => {
@@ -77,6 +97,7 @@ watch(visible, (value) => {
 onMounted(() => {
   initTags()
   addTags()
+  updateCurrentTag()
 })
 
 function isActive(r) {
@@ -127,6 +148,9 @@ function filterAffixTags(routes, basePath = '') {
   })
   return tags
 }
+function navigate(route) {
+  router.push(route)
+}
 function initTags() {
   const res = filterAffixTags(routes.value);
   affixTags.value = res;
@@ -160,12 +184,28 @@ function moveToCurrentTag() {
     }
   })
 }
+function updateCurrentTag() {
+  currentTag.value = visitedViews.value.filter((item) => isActive(item))[0]
+}
 function refreshSelectedTag(view) {
   proxy.$tab.refreshPage(view);
   if (route.meta.link) {
     useTagsViewStore().delIframeView(route);
   }
 }
+// function handleClose(name) {
+//   const { value: panels } = panelsRef;
+//   if (panels.length === 1) {
+//     message.error("最后一个了");
+//     return;
+//   }
+//   message.info("关掉 " + name);
+//   const index = panels.findIndex((v) => name === v);
+//   panels.splice(index, 1);
+//   if (nameRef.value === name) {
+//     nameRef.value = panels[index];
+//   }
+// }
 function closeSelectedTag(view) {
   proxy.$tab.closePage(view).then(({ visitedViews }) => {
     if (isActive(view)) {
@@ -243,11 +283,12 @@ function handleScroll() {
 
 <style lang='scss' scoped>
 .tags-view-container {
-  height: 34px;
-  width: 100%;
+  padding-left: 10px;
+  height: 43px;
+  /* width: 100%; */
   background: #fff;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  /* border-bottom: 1px solid #d8dce5; */
+  /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04); */
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
