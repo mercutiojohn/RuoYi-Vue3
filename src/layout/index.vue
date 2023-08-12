@@ -1,24 +1,27 @@
 <template>
-  <n-layout
-    has-sider
-    class="app-wrapper h-screen overflow-hidden"
-    :style="{ '--current-color': theme }"
-    :class="classObj"
-  >
-    <sidebar v-if="!sidebar.hide" class="sidebar-container" />
-    <!--  :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" -->
-    <n-layout class="main-container">
-      <n-layout-header bordered :class="{ 'fixed-header': fixedHeader }">
-        <navbar @setLayout="setLayout" />
-        <tags-view v-if="needTagsView" />
-      </n-layout-header>
-      <!-- content-style="padding: 24px;"  -->
-      <n-layout :native-scrollbar="false">
-        <app-main />
+  <div class="app-wrapper h-screen relative">
+    <n-layout
+      has-sider
+      :style="{ '--current-color': theme }"
+      position="absolute"
+      :class="classObj"
+    >
+      <sidebar v-if="!sidebar.hide" class="sidebar-container" />
+      <!--  :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" -->
+      <n-layout class="main-container children:flex children:flex-col">
+        <!-- :class="{ 'fixed-header': fixedHeader }" -->
+        <n-layout-header class="flex-shrink-0" bordered>
+          <navbar @setLayout="setLayout" />
+          <tags-view v-if="needTagsView" />
+        </n-layout-header>
+        <!-- content-style="padding: 24px;"  -->
+        <n-layout class="h-full flex-shrink" :native-scrollbar="false">
+          <app-main />
+        </n-layout>
+        <!-- <n-layout-footer style="padding: 24px" bordered> 城府路 </n-layout-footer> -->
       </n-layout>
-      <!-- <n-layout-footer style="padding: 24px" bordered> 城府路 </n-layout-footer> -->
     </n-layout>
-  </n-layout>
+  </div>
   <settings ref="settingRef" />
 </template>
 

@@ -1,22 +1,18 @@
 <template>
-  <div>
-    <svg-icon :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'" @click="toggle" />
-  </div>
+  <n-button quaternary @click="toggle">
+    <n-icon size="24">
+      <maximize v-if="!isFullscreen"/>
+      <minimize v-else/>
+    </n-icon>
+  </n-button>
 </template>
 
 <script setup>
 import { useFullscreen } from '@vueuse/core'
+import { 
+  FullScreenMaximize24Regular as Maximize,
+  FullScreenMinimize24Regular as Minimize
+} from "@vicons/fluent";
 
 const { isFullscreen, enter, exit, toggle } = useFullscreen();
 </script>
-
-<style lang='scss' scoped>
-.screenfull-svg {
-  display: inline-block;
-  cursor: pointer;
-  fill: #5a5e66;
-  width: 20px;
-  height: 20px;
-  vertical-align: 10px;
-}
-</style>

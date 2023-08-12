@@ -17,10 +17,17 @@ const theme = computed(() => settingsStore.theme);
 
 const themeOverrides = {
   common: {
-    primaryColor: '#000',
+    primaryColor: '#409EFF',
+  },
+  Input: {
+    borderRadius: "8px"
   },
   Button: {
     textColor: "#000000",
+    borderRadiusTiny: "4px",
+    borderRadiusSmall: "6px",
+    borderRadiusMedium: "10px",
+    borderRadiusLarge: "10px"
   },
   Select: {
     peers: {
@@ -29,6 +36,17 @@ const themeOverrides = {
       },
     },
   },
+  Menu: {
+    borderRadius: '10px'
+  },
+  Tabs: {
+    tabBorderRadius: '6px'
+  },
+  Dropdown: {
+    borderRadius: "10px",
+    optionIconSizeHuge: "24px",
+    optionIconPrefixWidthHuge: '48px'
+  }
   // ...
 };
 

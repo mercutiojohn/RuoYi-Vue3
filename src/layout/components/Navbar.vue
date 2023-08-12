@@ -1,49 +1,88 @@
 <template>
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
-    <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
-
-    <div class="right-menu">
-      <template v-if="appStore.device !== 'mobile'">
-        <header-search id="header-search" class="right-menu-item" />
-
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
-
-        <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
-      </template>
-      <div class="avatar-container">
-        <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
-          <div class="avatar-wrapper">
-            <img :src="userStore.avatar" class="user-avatar" />
-            <el-icon><caret-bottom /></el-icon>
+    <n-page-header @back="toggleSideBar">
+    <template #title>
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
+      <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
+    </template>
+    <!-- <template #header>
+      <n-breadcrumb>
+        <n-breadcrumb-item>播客</n-breadcrumb-item>
+        <n-breadcrumb-item>精选</n-breadcrumb-item>
+        <n-breadcrumb-item>超级精选</n-breadcrumb-item>
+        <n-breadcrumb-item>Anyway.FM</n-breadcrumb-item>
+      </n-breadcrumb>
+    </template> -->
+    <!-- <template #avatar>
+      <n-avatar
+        src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
+      />
+    </template> -->
+    <template #extra>
+      <n-space align="center">
+        <template v-if="appStore.device !== 'mobile'">
+          <header-search id="header-search" class="right-menu-item" />
+          <n-tooltip trigger="hover">
+            源码地址
+            <template #trigger>
+              <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
+            </template>
+          </n-tooltip>
+          <n-tooltip trigger="hover">
+            文档地址
+            <template #trigger>
+              <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
+            </template>
+          </n-tooltip>
+          <n-tooltip trigger="hover">
+            全屏
+            <template #trigger>
+              <screenfull id="screenfull" class="right-menu-item hover-effect" />
+            </template>
+          </n-tooltip>
+          <n-tooltip trigger="hover">
+            布局大小
+            <template #trigger>
+              <size-select id="size-select" class="right-menu-item hover-effect" />
+            </template>
+          </n-tooltip>
+        </template>
+        <div class="right-menu">
+          <div class="avatar-container">
+            <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
+              <n-avatar
+                size="medium"
+                :src="userStore.avatar"
+              />
+              <!-- <div class="avatar-wrapper">
+                <img :src="userStore.avatar" class="user-avatar" />
+                <el-icon><caret-bottom /></el-icon>
+              </div> -->
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <router-link to="/user/profile">
+                    <el-dropdown-item>个人中心</el-dropdown-item>
+                  </router-link>
+                  <el-dropdown-item command="setLayout">
+                    <span>布局设置</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item divided command="logout">
+                    <span>退出登录</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <router-link to="/user/profile">
-                <el-dropdown-item>个人中心</el-dropdown-item>
-              </router-link>
-              <el-dropdown-item command="setLayout">
-                <span>布局设置</span>
-              </el-dropdown-item>
-              <el-dropdown-item divided command="logout">
-                <span>退出登录</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-    </div>
+        </div>
+        <!-- <n-dropdown :options="options" placement="bottom-start">
+          <n-button :bordered="false" style="padding: 0 4px">
+            ···
+          </n-button>
+        </n-dropdown> -->
+      </n-space>
+    </template>
+  </n-page-header>
   </div>
 </template>
 
@@ -60,6 +99,21 @@ import RuoYiDoc from '@/components/RuoYi/Doc'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
+
+const options = [
+  {
+    label: "催更",
+    key: "1"
+  },
+  {
+    label: "催更",
+    key: "2"
+  },
+  {
+    label: "催更",
+    key: "3"
+  }
+]
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -102,11 +156,11 @@ function setLayout() {
 
 <style lang='scss' scoped>
 .navbar {
-  height: 50px;
-  overflow: hidden;
-  position: relative;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  /* height: 50px; */
+  /* overflow: hidden; */
+  /* position: relative; */
+  /* background: #fff; */
+  /* box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08); */
 
   .hamburger-container {
     line-height: 46px;
@@ -122,12 +176,12 @@ function setLayout() {
   }
 
   .breadcrumb-container {
-    float: left;
+    /* float: left; */
   }
 
   .topmenu-container {
-    position: absolute;
-    left: 50px;
+    /* position: absolute; */
+    /* left: 50px; */
   }
 
   .errLog-container {
@@ -135,57 +189,5 @@ function setLayout() {
     vertical-align: top;
   }
 
-  .right-menu {
-    float: right;
-    height: 100%;
-    line-height: 50px;
-    display: flex;
-
-    &:focus {
-      outline: none;
-    }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background 0.3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, 0.025);
-        }
-      }
-    }
-
-    .avatar-container {
-      margin-right: 40px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        i {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
-    }
-  }
 }
 </style>

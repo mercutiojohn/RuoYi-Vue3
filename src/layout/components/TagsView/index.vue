@@ -1,24 +1,24 @@
 <template>
   <div id="tags-view-container" class="tags-view-container">
-    <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
-      <n-tabs
-        v-model:value="currentTag"
-        type="card"
-        closable
-        @close="closeSelectedTag"
+    <n-tabs
+      v-model:value="currentTag"
+      type="card"
+      closable
+      @close="closeSelectedTag"
+    >
+      <n-tab
+        v-for="tag in visitedViews"
+        :key="tag.path"
+        :tab="tag"
+        :name="tag"
+        :closable="!isAffix(tag)"
+        @click="navigate({ path: tag.path, query: tag.query, fullPath: tag.fullPath })"
+        @contextmenu.prevent="openMenu(tag, $event)"
       >
-        <n-tab
-          v-for="tag in visitedViews"
-          :key="tag.path"
-          :tab="tag"
-          :name="tag"
-          :closable="!isAffix(tag)"
-          @click="navigate({ path: tag.path, query: tag.query, fullPath: tag.fullPath })"
-          @contextmenu.prevent="openMenu(tag, $event)"
-        >
-        {{tag.title}}
-        </n-tab>
-      </n-tabs>
+      {{tag.title}}
+      </n-tab>
+    </n-tabs>
+    <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
       <router-link
         v-for="tag in visitedViews"
         :key="tag.path"
@@ -36,6 +36,17 @@
         </span>
       </router-link>
     </scroll-pane>
+    <n-dropdown
+      placement="bottom-start"
+      trigger="manual"
+      size="huge"
+      :x="left"
+      :y="top"
+      :options="options"
+      :show="visible"
+      :on-clickoutside="onClickoutside"
+      @select="handleSelect"
+    />
     <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">
         <refresh-right style="width: 1em; height: 1em;" /> 刷新页面
@@ -60,11 +71,20 @@
 </template>
 
 <script setup>
+import { NIcon } from "naive-ui";
 import ScrollPane from './ScrollPane'
 import { getNormalPath } from '@/utils/ruoyi'
 import useTagsViewStore from '@/store/modules/tagsView'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
+import {
+  ArrowClockwise16Regular as Refresh,
+  Dismiss16Regular as Close,
+  DismissSquareMultiple16Regular as CloseMultiple,
+  ArrowRight16Regular as Right,
+  ArrowLeft16Regular as Left,
+  DismissCircle16Regular as CloseCircle
+} from "@vicons/fluent";
 
 const visible = ref(false);
 const top = ref(0);
@@ -81,6 +101,51 @@ const router = useRouter();
 const visitedViews = computed(() => useTagsViewStore().visitedViews);
 const routes = computed(() => usePermissionStore().routes);
 const theme = computed(() => useSettingsStore().theme);
+
+const renderIcon = (icon) => {
+  return () => {
+    return h(NIcon, null, {
+      default: () => h(icon)
+    })
+  }
+}
+
+const options = [
+  {
+    label: "刷新页面",
+    key: "refreshSelectedTag",
+    icon: renderIcon(Refresh)
+  },
+  {
+    type: "divider",
+    key: "d1"
+  },
+  {
+    label: "关闭当前",
+    key: "closeSelectedTag",
+    icon: renderIcon(Close)
+  },
+  {
+    label: "关闭其他",
+    key: "closeOthersTags",
+    icon: renderIcon(CloseCircle)
+  },
+  {
+    label: "关闭左侧",
+    key: "closeLeftTags",
+    icon: renderIcon(Left)
+  },
+  {
+    label: "关闭右侧",
+    key: "closeRightTags",
+    icon: renderIcon(Right)
+  },
+  {
+    label: "全部关闭",
+    key: "closeAllTags",
+    icon: renderIcon(CloseMultiple)
+  }
+];
 
 watch(route, () => {
   addTags()
@@ -258,7 +323,8 @@ function toLastView(visitedViews, view) {
 }
 function openMenu(tag, e) {
   const menuMinWidth = 105
-  const offsetLeft = proxy.$el.getBoundingClientRect().left // container margin left
+  // const offsetLeft = proxy.$el.getBoundingClientRect().left // container margin left
+  const offsetLeft = e.clientX // container margin left
   const offsetWidth = proxy.$el.offsetWidth // container width
   const maxLeft = offsetWidth - menuMinWidth // left boundary
   const l = e.clientX - offsetLeft + 15 // 15: margin right
@@ -268,7 +334,7 @@ function openMenu(tag, e) {
   } else {
     left.value = l
   }
-
+  left.value = e.clientX
   top.value = e.clientY
   visible.value = true
   selectedTag.value = tag
