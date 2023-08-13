@@ -34,9 +34,9 @@
       transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
     }
 
-    .scrollbar-wrapper {
-      overflow-x: hidden !important;
-    }
+    // .scrollbar-wrapper {
+    //   overflow-x: hidden !important;
+    // }
 
     .el-scrollbar__bar.is-vertical {
       right: 0px;

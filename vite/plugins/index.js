@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 import createAutoImport from './auto-import'
 import createComponents from './components'
@@ -9,7 +10,7 @@ import createSetupExtend from './setup-extend'
 import UnoCSS from 'unocss/vite'
 
 export default function createVitePlugins(viteEnv, isBuild = false) {
-    const vitePlugins = [vue(),UnoCSS()]
+    const vitePlugins = [vue(),UnoCSS(),vueJsx({})]
     vitePlugins.push(createAutoImport())
     vitePlugins.push(createComponents())
 	vitePlugins.push(createSetupExtend())

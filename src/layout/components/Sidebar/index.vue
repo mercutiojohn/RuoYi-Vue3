@@ -2,11 +2,13 @@
 <!-- TODO: 更新侧边栏当前页高亮 -->
   <n-layout-sider
     collapse-mode="width"
-    :collapsed-width="49"
+    :collapsed-width="64"
     :width="240"
     :native-scrollbar="false"
     :collapsed="isCollapse"
     show-trigger="bar"
+    @collapse="toggleSideBar"
+    @expand="toggleSideBar"
     :style="{
       padding: 0,
       backgroundColor:
@@ -23,9 +25,17 @@
     :class="{ 'has-logo': showLogo }"
   >
     <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
-      <n-menu :options="menuOptions" @update:value="handleUpdateValue" :collapsed="isCollapse"/>
-      <el-menu
+    <n-menu 
+        :options="menuOptions" 
+        @update:value="handleUpdateValue"
+        :collapsed="isCollapse"
+        :collapsed-width="64"
+        :root-indent="24"
+        :indent="24"
+        v-model:value="activeMenu"
+      />
+    <!-- <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper"> -->
+      <!-- <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
         :background-color="
@@ -50,7 +60,7 @@
           :base-path="route.path"
         />
       </el-menu>
-    </el-scrollbar>
+    </el-scrollbar> -->
   </div>
   </n-layout-sider>
 </template>
@@ -86,8 +96,11 @@ const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
 
-// Naive
 const message = useMessage();
+
+function toggleSideBar() {
+  appStore.toggleSideBar()
+}
 
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
@@ -100,10 +113,12 @@ function renderSvgIcon(icon) {
 }
 
 function handleUpdateValue(key, item) {
-  message.info("[onUpdate:value]: " + JSON.stringify(key));
-  message.info("[onUpdate:value]: " + JSON.stringify(item));
+  // message.info("[onUpdate:value]: " + JSON.stringify(key));
+  // message.info("[onUpdate:value]: " + JSON.stringify(item));
 }
 
+const home = sidebarRouters.value.filter((item) => item.path === '' && item.redirect === '/index')[0].children[0]
+console.log('hello', home)
 const menuOptions = [
   {
     label: () =>
@@ -111,12 +126,12 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            path: "/index",
+            path: home.path,
           },
         },
-        { default: () => "首页" }
+        home.meta.title
       ),
-    key: "go-back-home",
+    key: home.path,
     icon: renderIcon(HomeIcon),
   },
   {
@@ -124,7 +139,7 @@ const menuOptions = [
     type: "divider",
     props: {
       style: {
-        marginLeft: "32px",
+        // marginLeft: "32px",
       },
     },
   },
@@ -132,12 +147,16 @@ const menuOptions = [
 
 function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
   sidebarLayerRouters.forEach((item) => {
-    if (item.hidden || !item.meta) return;
+    if (item.path === '') return;
     let obj = {
-      // label: item.meta.title,
-      label: () => {
+      key: `${parentPath}${!!parentPath ? "/" : ""}${item.path}`,
+      icon: renderSvgIcon(item.meta?.icon), // TODO
+      show: !item.hidden
+    }
+    // if (item.meta) {
+      obj.label = () => {
         if (!item.children) {
-          if (!item.meta.link) {
+          if (!item.meta?.link) {
             return h(
               RouterLink,
               {
@@ -145,33 +164,31 @@ function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
                   path: `${parentPath}${!!parentPath ? "/" : ""}${item.path}`,
                 },
               },
-              item.meta.title
+              item.meta?.title
               // { default: () => item.meta.title }
             );
           } else {
             return h(
               "a",
               {
-                href: item.meta.link,
+                href: item.meta?.link,
                 target: "_blank",
                 rel: "noopenner noreferrer",
               },
-              item.meta.title
+              item.meta?.title
               // { default: () => item.meta.title }
             );
           }
         } else {
-          return item.meta.title;
+          return item.meta?.title
         }
-      },
-      key: item.name,
-      icon: renderSvgIcon(item.meta.icon), // TODO
-    };
+      }
+    // }
     if (!!item.children) {
-      obj.children = [];
-      renderMenu(item.children, obj.children, item.path);
+      obj.children = []
+      renderMenu(item.children, obj.children, item.path)
     }
-    menuLayerOptions.push(obj);
+    menuLayerOptions.push(obj)
   });
 }
 

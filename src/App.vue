@@ -44,6 +44,8 @@ const themeOverrides = {
   },
   Dropdown: {
     borderRadius: "10px",
+    // optionIconSizeLarge: "32px",
+    // optionIconPrefixWidthLarge: '48px',
     optionIconSizeHuge: "24px",
     optionIconPrefixWidthHuge: '48px'
   }

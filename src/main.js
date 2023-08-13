@@ -6,7 +6,8 @@ import ElementPlus from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn' // 中文语言
 
 /** 重置样式 这里引入自定义的重置样式也可 */
-import '@unocss/reset/tailwind.css'
+// https://unocss.dev/guide/style-reset#tailwind-compat
+import '@unocss/reset/tailwind-compat.css'
 /** 
  *  项目内的样式，
  *  注意：最好放在重置样式后，uno.css前
