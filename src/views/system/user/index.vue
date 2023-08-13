@@ -78,57 +78,66 @@
                </el-form-item>
             </el-form>
 
-            <el-row :gutter="10" class="mb8">
-               <el-col :span="1.5">
-                  <el-button
-                     type="primary"
-                     plain
-                     icon="Plus"
-                     @click="handleAdd"
-                     v-hasPermi="['system:user:add']"
-                  >新增</el-button>
-               </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="success"
-                     plain
-                     icon="Edit"
-                     :disabled="single"
-                     @click="handleUpdate"
-                     v-hasPermi="['system:user:edit']"
-                  >修改</el-button>
-               </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="danger"
-                     plain
-                     icon="Delete"
-                     :disabled="multiple"
-                     @click="handleDelete"
-                     v-hasPermi="['system:user:remove']"
-                  >删除</el-button>
-               </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="info"
-                     plain
-                     icon="Upload"
-                     @click="handleImport"
-                     v-hasPermi="['system:user:import']"
-                  >导入</el-button>
-               </el-col>
-               <el-col :span="1.5">
-                  <el-button
-                     type="warning"
-                     plain
-                     icon="Download"
-                     @click="handleExport"
-                     v-hasPermi="['system:user:export']"
-                  >导出</el-button>
-               </el-col>
+            <n-space>
+               <n-button 
+                  type="primary"
+                  secondary
+                  @click="handleAdd"
+                  v-hasPermi="['system:user:add']"
+               >
+                  <template #icon>
+                     <i class="i-fluent-add-12-regular"></i>
+                  </template>
+                  新增
+               </n-button>
+               <n-button 
+                  type="error"
+                  secondary
+                  :disabled="multiple"
+                  @click="handleDelete"
+                  v-hasPermi="['system:user:remove']"
+               >
+                  <template #icon>
+                     <i class="i-fluent-delete-12-regular"></i>
+                  </template>
+                  删除
+               </n-button>
+               <n-button 
+                  @click="handleUpdate"
+                  v-hasPermi="['system:user:edit']"
+               >
+                  <template #icon>
+                     <i class="i-fluent-edit-16-regular"></i>
+                  </template>
+                  修改
+               </n-button>
+               <n-button 
+                  @click="handleImport"
+                  v-hasPermi="['system:user:import']"
+               >
+                  <template #icon>
+                     <i class="i-fluent-arrow-upload-16-regular"></i>
+                  </template>
+                  导入
+               </n-button>
+               <n-button 
+                  @click="handleExport"
+                  v-hasPermi="['system:user:export']"
+               >
+                  <template #icon>
+                     <i class="i-fluent-arrow-download-16-regular"></i>
+                  </template>
+                  导出
+               </n-button>
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
-            </el-row>
-
+            </n-space>
+            <n-data-table
+               :columns="columns"
+               :data="userList"
+               :pagination="pagination"
+               :row-key="rowKey"
+               @update:checked-row-keys="handleCheck"
+            />
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
                <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
@@ -329,10 +338,11 @@
    </div>
 </template>
 
-<script setup name="User">
+<script setup name="User" lang='jsx'>
 import { getToken } from "@/utils/auth";
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from "@/api/system/user";
-
+import { NSwitch, NButton } from "naive-ui"
+import { nextTick } from "vue";
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
@@ -367,16 +377,104 @@ const upload = reactive({
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/system/user/importData"
 });
+
+
+const columnsTest = computed(() => [
+  {
+    type: "selection",
+    disabled(row) {
+      return row.name === "Edward King 3";
+    }
+  },
+  {
+    title: "用户编号",
+    key: "userId"
+  },
+  {
+    title: "用户名称",
+    key: "userName"
+  },
+  {
+    title: "Address",
+    key: "address"
+  }
+])
+
 // 列显隐信息
 const columns = ref([
-  { key: 0, label: `用户编号`, visible: true },
-  { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `用户昵称`, visible: true },
-  { key: 3, label: `部门`, visible: true },
-  { key: 4, label: `手机号码`, visible: true },
-  { key: 5, label: `状态`, visible: true },
-  { key: 6, label: `创建时间`, visible: true }
+   {
+    type: "selection",
+    disabled(row) {
+      return row.name === "Edward King 3";
+    }
+  },
+  { key:'userId', title: `用户编号`, visible: true },
+  { key:'userName', title: `用户名称`, visible: true },
+  { key:'nickName', title: `用户昵称`, visible: true },
+  { key:'dept.deptName', title: `部门`, visible: true },
+  { key:'phonenumber', title: `手机号码`, visible: true },
+  { 
+      key:'status', 
+      title: `状态`, 
+      visible: true,
+      render(row) {
+         // return h(NSwitch, {
+         //    value: row.status,
+         //    checkedValue: '0',
+         //    uncheckedValue: '1',
+         //    // 监测switch的改变
+         //    onChange: () => handleStatusChange(row),
+         // })
+         return (
+            <NSwitch
+               value={row.status}
+               checkedValue={'0'}
+               uncheckedValue={'1'}
+               // 监测switch的改变
+               onChange={() => handleStatusChange(row)}
+            />
+         )
+      },
+   },
+  { key: 'createTime',  title: `创建时间`, visible: true },
+  {
+      title: '操作',
+      key: 'actions',
+      render (row) {
+         const a = ['system:user:edit']
+         const b = ['system:user:remove']
+         const c = ['system:user:resetPwd']
+         const d = ['system:user:edit']
+        return (
+         <>
+            <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
+               <el-button link type="primary" icon="Edit" onClick={()=>handleUpdate(row)} v-hasPermi={a}></el-button>
+            </el-tooltip>
+            <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
+               <el-button link type="primary" icon="Delete" onClick={()=>handleDelete(row)} v-hasPermi={b}></el-button>
+            </el-tooltip>
+            <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
+                  <el-button link type="primary" icon="Key" onClick={()=>handleResetPwd(row)} v-hasPermi={c}></el-button>
+            </el-tooltip>
+            <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
+               <el-button link type="primary" icon="CircleCheck" onClick={()=>handleAuthRole(row)} v-hasPermi={d}></el-button>
+            </el-tooltip>
+         </>
+         )
+      }
+    }
 ]);
+
+const dataTest = Array.from({ length: 46 }).map((_, index) => ({
+  name: `Edward King ${index}`,
+  age: 32,
+  address: `London, Park Lane no. ${index}`
+}));
+
+const pagination = {
+   pageSize: 5
+};
+
 
 const data = reactive({
   form: {},
@@ -396,6 +494,9 @@ const data = reactive({
     phonenumber: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }]
   }
 });
+
+const rowKey = reactive((row) => row.address);
+
 
 const { queryParams, form, rules } = toRefs(data);
 
@@ -465,7 +566,9 @@ function handleStatusChange(row) {
   }).then(() => {
     proxy.$modal.msgSuccess(text + "成功");
   }).catch(function () {
-    row.status = row.status === "0" ? "1" : "0";
+    nextTick(() => {
+      row.status = row.status === "0" ? "1" : "0";
+    });
   });
 };
 /** 更多操作 */
