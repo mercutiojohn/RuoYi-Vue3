@@ -1,5 +1,4 @@
 <template>
-<!-- TODO: 更新侧边栏当前页高亮 -->
   <n-layout-sider
     collapse-mode="width"
     :collapsed-width="64"
