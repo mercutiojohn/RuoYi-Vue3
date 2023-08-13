@@ -1,24 +1,21 @@
 <template>
   <div class="navbar">
-    <!-- <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
-    <n-page-header @back="toggleSideBar">
+    <n-page-header>
+    <template #back>
+      <!-- <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
+      <!-- @back="toggleSideBar" -->
+    </template>
     <template #title>
-      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
+      <span v-if="!settingsStore.topNav && !needTagsView">{{route.meta.title}}</span>
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav && needTagsView" />
       <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
     </template>
     <!-- <template #header>
-      <n-breadcrumb>
-        <n-breadcrumb-item>播客</n-breadcrumb-item>
-        <n-breadcrumb-item>精选</n-breadcrumb-item>
-        <n-breadcrumb-item>超级精选</n-breadcrumb-item>
-        <n-breadcrumb-item>Anyway.FM</n-breadcrumb-item>
-      </n-breadcrumb>
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
     </template> -->
-    <!-- <template #avatar>
-      <n-avatar
-        src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
-      />
-    </template> -->
+    <template #avatar v-if="!settingsStore.topNav && !needTagsView">
+      <svg-icon :icon-class="route.meta.icon" class="font-size-5"/>
+    </template>
     <template #extra>
       <n-space align="center">
         <template v-if="appStore.device !== 'mobile'">
@@ -101,24 +98,13 @@ import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 
-const options = [
-  {
-    label: "催更",
-    key: "1"
-  },
-  {
-    label: "催更",
-    key: "2"
-  },
-  {
-    label: "催更",
-    key: "3"
-  }
-]
+const route = useRoute();
 
 const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
+
+const needTagsView = computed(() => settingsStore.tagsView);
 
 function toggleSideBar() {
   appStore.toggleSideBar()

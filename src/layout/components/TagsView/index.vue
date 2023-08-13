@@ -16,7 +16,10 @@
         @click="navigate({ path: tag.path, query: tag.query, fullPath: tag.fullPath })"
         @contextmenu.prevent="openMenu(tag, $event)"
       >
-      {{tag.title}}
+        <n-space :size="6">
+          <svg-icon :icon-class="tag.meta.icon" class="font-size-5"/>
+          {{tag.title}}
+        </n-space>
       </n-tab>
     </n-tabs>
     <!-- <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
@@ -77,10 +80,14 @@ const currentTag = ref({});
 
 const { proxy } = getCurrentInstance();
 const route = useRoute();
+console.log('【route',route)
 const router = useRouter();
+console.log('【router',router)
 
 const visitedViews = computed(() => useTagsViewStore().visitedViews);
+console.log('【visitedViews',visitedViews)
 const routes = computed(() => usePermissionStore().routes);
+console.log('【routes',routes)
 const theme = computed(() => useSettingsStore().theme);
 
 const renderIcon = (icon) => {

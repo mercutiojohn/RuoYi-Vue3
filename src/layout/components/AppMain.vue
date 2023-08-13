@@ -1,9 +1,9 @@
 <template>
-  <section class="app-main absolute w-full">
+  <section class="app-main">
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform" mode="out-in">
         <keep-alive :include="tagsViewStore.cachedViews">
-          <component v-if="!route.meta.link" :is="Component" :key="route.path" class="absolute w-full"/>
+          <component v-if="!route.meta.link" :is="Component" :key="route.path"/>
         </keep-alive>
       </transition>
     </router-view>
