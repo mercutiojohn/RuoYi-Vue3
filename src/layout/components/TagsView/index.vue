@@ -5,6 +5,7 @@
       type="card"
       closable
       @close="closeSelectedTag"
+      size="small"
     >
       <n-tab
         v-for="tag in visitedViews"
@@ -18,7 +19,7 @@
       {{tag.title}}
       </n-tab>
     </n-tabs>
-    <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
+    <!-- <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
       <router-link
         v-for="tag in visitedViews"
         :key="tag.path"
@@ -35,7 +36,7 @@
           <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
         </span>
       </router-link>
-    </scroll-pane>
+    </scroll-pane> -->
     <n-dropdown
       placement="bottom-start"
       trigger="manual"
@@ -350,11 +351,6 @@ function handleScroll() {
 <style lang='scss' scoped>
 .tags-view-container {
   padding-left: 10px;
-  height: 43px;
-  /* width: 100%; */
-  background: #fff;
-  /* border-bottom: 1px solid #d8dce5; */
-  /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04); */
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;

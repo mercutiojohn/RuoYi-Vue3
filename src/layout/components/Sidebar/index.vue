@@ -6,8 +6,18 @@
     :native-scrollbar="false"
     :collapsed="isCollapse"
     show-trigger="bar"
+    :trigger-style="{
+      opacity: hovered ? 1 : 0,
+      transition: 'opacity .2s ease, right .2s ease'
+    }"
+    :collapsed-trigger-style="{
+      opacity: hovered ? 1 : 0,
+      transition: 'opacity .2s ease, right .2s ease'
+    }"
     @collapse="toggleSideBar"
     @expand="toggleSideBar"
+    @mouseenter="hovered = true"
+    @mouseleave="hideTrigger"
     :style="{
       padding: 0,
       backgroundColor:
@@ -95,7 +105,15 @@ const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
 
-const message = useMessage();
+const hovered = ref(false)
+
+function hideTrigger() {
+  setTimeout(()=>{
+    hovered.value = false
+  },7000)
+}
+
+const message = useMessage()
 
 function toggleSideBar() {
   appStore.toggleSideBar()

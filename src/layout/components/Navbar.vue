@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
     <n-page-header @back="toggleSideBar">
     <template #title>
       <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
@@ -53,6 +53,7 @@
             <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
               <n-avatar
                 size="medium"
+                round
                 :src="userStore.avatar"
               />
               <!-- <div class="avatar-wrapper">
@@ -156,6 +157,7 @@ function setLayout() {
 
 <style lang='scss' scoped>
 .navbar {
+  padding: 0 10px;
   /* height: 50px; */
   /* overflow: hidden; */
   /* position: relative; */
