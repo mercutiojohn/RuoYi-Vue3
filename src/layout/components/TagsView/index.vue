@@ -11,7 +11,7 @@
         v-for="tag in visitedViews"
         :key="tag.path"
         :tab="tag"
-        :name="tag"
+        :name="tag.path"
         :closable="!isAffix(tag)"
         @click="navigate({ path: tag.path, query: tag.query, fullPath: tag.fullPath })"
         @contextmenu.prevent="openMenu(tag, $event)"
@@ -45,29 +45,9 @@
       :y="top"
       :options="options"
       :show="visible"
-      :on-clickoutside="onClickoutside"
       @select="handleSelect"
     />
-    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">
-        <refresh-right style="width: 1em; height: 1em;" /> 刷新页面
-      </li>
-      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">
-        <close style="width: 1em; height: 1em;" /> 关闭当前
-      </li>
-      <li @click="closeOthersTags">
-        <circle-close style="width: 1em; height: 1em;" /> 关闭其他
-      </li>
-      <li v-if="!isFirstView()" @click="closeLeftTags">
-        <back style="width: 1em; height: 1em;" /> 关闭左侧
-      </li>
-      <li v-if="!isLastView()" @click="closeRightTags">
-        <right style="width: 1em; height: 1em;" /> 关闭右侧
-      </li>
-      <li @click="closeAllTags(selectedTag)">
-        <circle-close style="width: 1em; height: 1em;" /> 全部关闭
-      </li>
-    </ul>
+    <!-- :on-clickoutside="onClickoutside" -->
   </div>
 </template>
 
@@ -111,7 +91,7 @@ const renderIcon = (icon) => {
   }
 }
 
-const options = [
+const options = computed(()=>[
   {
     label: "刷新页面",
     key: "refreshSelectedTag",
@@ -124,6 +104,7 @@ const options = [
   {
     label: "关闭当前",
     key: "closeSelectedTag",
+    show: !isAffix(selectedTag.value),
     icon: renderIcon(Close)
   },
   {
@@ -134,11 +115,13 @@ const options = [
   {
     label: "关闭左侧",
     key: "closeLeftTags",
+    show: !isFirstView(),
     icon: renderIcon(Left)
   },
   {
     label: "关闭右侧",
     key: "closeRightTags",
+    show: !isLastView(),
     icon: renderIcon(Right)
   },
   {
@@ -146,12 +129,35 @@ const options = [
     key: "closeAllTags",
     icon: renderIcon(CloseMultiple)
   }
-];
+]);
+
+function handleSelect(item) {
+  switch (item) {
+    case 'refreshSelectedTag':
+      refreshSelectedTag(selectedTag.value);
+      break;
+    case 'closeSelectedTag':
+      closeSelectedTag(selectedTag.value);
+      break;
+    case 'closeOthersTags':
+      closeOthersTags();
+      break;
+    case 'closeLeftTags':
+      closeLeftTags();
+      break;
+    case 'closeRightTags':
+      closeRightTags();
+      break;
+    case 'closeAllTags':
+      closeAllTags(selectedTag.value);
+      break;
+  }
+}
 
 watch(route, () => {
   addTags()
   updateCurrentTag()
-  moveToCurrentTag()
+  // moveToCurrentTag()
 })
 watch(visible, (value) => {
   if (value) {
@@ -251,7 +257,7 @@ function moveToCurrentTag() {
   })
 }
 function updateCurrentTag() {
-  currentTag.value = visitedViews.value.filter((item) => isActive(item))[0]
+  currentTag.value = visitedViews.value.filter((item) => isActive(item))[0].path
 }
 function refreshSelectedTag(view) {
   proxy.$tab.refreshPage(view);
@@ -385,27 +391,6 @@ function handleScroll() {
           position: relative;
           margin-right: 2px;
         }
-      }
-    }
-  }
-  .contextmenu {
-    margin: 0;
-    background: #fff;
-    z-index: 3000;
-    position: absolute;
-    list-style-type: none;
-    padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-    li {
-      margin: 0;
-      padding: 7px 16px;
-      cursor: pointer;
-      &:hover {
-        background: #eee;
       }
     }
   }

@@ -2,42 +2,92 @@
   <n-layout embedded class="app-container">
     <el-row>
       <el-col :span="12" class="card-box">
-        <n-card size="small">
-          <template #header>
-            <Cpu style="width: 1em; height: 1em; vertical-align: middle" />CPU
-            <n-statistic
-              label="核心数"
-              :value="server.cpu.cpuNum"
-              v-if="server.cpu"
+        <n-space vertical :size="20">
+          <n-card size="small">
+            <template #header>
+              <Cpu style="width: 1em; height: 1em; vertical-align: middle" />CPU
+              <n-statistic
+                label="核心数"
+                :value="server.cpu.cpuNum"
+                v-if="server.cpu"
+              >
+              </n-statistic>
+            </template>
+            <n-space vertical :size="10" v-if="server.cpu">
+              <n-grid x-gap="20" y-gap="15" :cols="3">
+                <n-gi>
+                  <n-statistic label="用户使用率">
+                    {{ server.cpu.used }}%
+                  </n-statistic>
+                </n-gi>
+                <n-gi>
+                  <n-statistic label="系统使用率">
+                    {{ server.cpu.sys }}%
+                  </n-statistic>
+                </n-gi>
+                <n-gi>
+                  <n-statistic label="当前空闲率">
+                    {{ server.cpu.free }}%
+                  </n-statistic>
+                </n-gi>
+              </n-grid>
+              <n-progress
+                :status="100 - server.cpu.free > 80 ? 'warning' : 'info'"
+                type="line"
+                :percentage="100 - server.cpu.free"
+                :show-indicator="false"
+              />
+            </n-space>
+          </n-card>
+          <n-card size="small">
+            <template #header
+              ><Monitor style="width: 1em; height: 1em; vertical-align: middle" />
+              <span style="vertical-align: middle">服务器信息</span></template
             >
-            </n-statistic>
-          </template>
-          <n-space vertical :size="10" v-if="server.cpu">
-            <n-grid x-gap="20" y-gap="15" :cols="3">
-              <n-gi>
-                <n-statistic label="用户使用率">
-                  {{ server.cpu.used }}%
-                </n-statistic>
-              </n-gi>
-              <n-gi>
-                <n-statistic label="系统使用率">
-                  {{ server.cpu.sys }}%
-                </n-statistic>
-              </n-gi>
-              <n-gi>
-                <n-statistic label="当前空闲率">
-                  {{ server.cpu.free }}%
-                </n-statistic>
-              </n-gi>
-            </n-grid>
-            <n-progress
-              :status="100 - server.cpu.free > 80 ? 'warning' : 'info'"
-              type="line"
-              :percentage="100 - server.cpu.free"
-              :show-indicator="false"
-            />
-          </n-space>
-        </n-card>
+            <div class="el-table el-table--enable-row-hover el-table--medium">
+              <table cellspacing="0" style="width: 100%">
+                <tbody>
+                  <tr>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell">服务器名称</div>
+                    </td>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell" v-if="server.sys">
+                        {{ server.sys.computerName }}
+                      </div>
+                    </td>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell">操作系统</div>
+                    </td>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell" v-if="server.sys">
+                        {{ server.sys.osName }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell">服务器IP</div>
+                    </td>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell" v-if="server.sys">
+                        {{ server.sys.computerIp }}
+                      </div>
+                    </td>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell">系统架构</div>
+                    </td>
+                    <td class="el-table__cell is-leaf">
+                      <div class="cell" v-if="server.sys">
+                        {{ server.sys.osArch }}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </n-card>
+        </n-space>
       </el-col>
 
       <el-col :span="12" class="card-box">
@@ -117,58 +167,7 @@
       </el-col>
 
       <el-col :span="24" class="card-box">
-        <el-card>
-          <template #header
-            ><Monitor style="width: 1em; height: 1em; vertical-align: middle" />
-            <span style="vertical-align: middle">服务器信息</span></template
-          >
-          <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%">
-              <tbody>
-                <tr>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell">服务器名称</div>
-                  </td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">
-                      {{ server.sys.computerName }}
-                    </div>
-                  </td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell">操作系统</div>
-                  </td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">
-                      {{ server.sys.osName }}
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell">服务器IP</div>
-                  </td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">
-                      {{ server.sys.computerIp }}
-                    </div>
-                  </td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell">系统架构</div>
-                  </td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="server.sys">
-                      {{ server.sys.osArch }}
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </el-card>
-      </el-col>
-
-      <el-col :span="24" class="card-box">
-        <el-card>
+        <n-card size="small">
           <template #header
             ><CoffeeCup
               style="width: 1em; height: 1em; vertical-align: middle"
@@ -247,11 +246,11 @@
               </tbody>
             </table>
           </div>
-        </el-card>
+        </n-card>
       </el-col>
 
       <el-col :span="24" class="card-box">
-        <el-card>
+        <n-card size="small">
           <template #header
             ><MessageBox
               style="width: 1em; height: 1em; vertical-align: middle"
@@ -317,7 +316,7 @@
               </tbody>
             </table>
           </div>
-        </el-card>
+        </n-card>
       </el-col>
     </el-row>
   </n-layout>

@@ -14,11 +14,10 @@
           <navbar @setLayout="setLayout" />
           <tags-view v-if="needTagsView" />
         </n-layout-header>
-        <!-- content-style="padding: 24px;"  -->
         <n-layout class="h-full flex-shrink" :native-scrollbar="false">
           <app-main />
         </n-layout>
-        <!-- <n-layout-footer style="padding: 24px" bordered> 城府路 </n-layout-footer> -->
+        <n-layout-footer style="padding: 5px 10px" bordered> 城府路 </n-layout-footer>
       </n-layout>
     </n-layout>
   </div>

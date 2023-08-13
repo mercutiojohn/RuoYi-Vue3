@@ -15,17 +15,18 @@
 .fade-transform--move,
 .fade-transform-leave-active,
 .fade-transform-enter-active {
-  transition: all .5s;
+  transition: all .2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .fade-transform-enter {
   opacity: 0;
-  transform: translateX(-30px);
+  transform: translateY(-10px);
 }
 
 .fade-transform-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  // transition: 0s;
+  // transform: translateY(10px);
 }
 
 /* breadcrumb transition */

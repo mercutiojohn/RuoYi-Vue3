@@ -146,7 +146,7 @@ const menuOptions = [
             path: home.path,
           },
         },
-        home.meta.title
+        { default: () => home.meta?.title }
       ),
     key: home.path,
     icon: renderIcon(HomeIcon),
@@ -167,7 +167,7 @@ function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
     if (item.path === '') return;
     let obj = {
       key: `${parentPath}${!!parentPath ? "/" : ""}${item.path}`,
-      icon: renderSvgIcon(item.meta?.icon), // TODO
+      icon: renderSvgIcon(item.meta?.icon),
       show: !item.hidden
     }
     // if (item.meta) {
@@ -181,8 +181,8 @@ function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
                   path: `${parentPath}${!!parentPath ? "/" : ""}${item.path}`,
                 },
               },
-              item.meta?.title
-              // { default: () => item.meta.title }
+              // item.meta?.title
+              { default: () => item.meta?.title }
             );
           } else {
             return h(
@@ -192,8 +192,8 @@ function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
                 target: "_blank",
                 rel: "noopenner noreferrer",
               },
-              item.meta?.title
-              // { default: () => item.meta.title }
+              // item.meta?.title
+              { default: () => item.meta?.title }
             );
           }
         } else {
