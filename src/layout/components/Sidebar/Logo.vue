@@ -34,7 +34,7 @@ const sideTheme = computed(() => settingsStore.sideTheme);
 <style lang="scss" scoped>
 .sidebarLogoFade-leave-to-active,
 .sidebarLogoFade-enter-active {
-  transition: opacity 1.5s ease;
+  transition: opacity 1.5s ease 1.5s;
 }
 
 .sidebarLogoFade-enter,

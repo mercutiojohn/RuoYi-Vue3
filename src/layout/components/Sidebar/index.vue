@@ -34,7 +34,7 @@
   <div
     :class="{ 'has-logo': showLogo }"
   >
-    <logo v-if="showLogo" :collapse="isCollapse" sticky top-0 z-2 mr-0.25 class="bg-$n-color logo-transition"/>
+    <logo v-if="showLogo" :collapse="isCollapse" class="sticky top-0 z-2 mr-0.25 bg-$n-color logo-transition"/>
     <n-menu 
         :inverted="sideTheme === 'theme-dark'"
         :options="menuOptions" 
