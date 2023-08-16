@@ -1,9 +1,9 @@
 <template>
    <div class="app-container">
-      <el-row :gutter="20">
-         <el-col :span="6" :xs="24">
-            <el-card class="box-card">
-               <template v-slot:header>
+      <n-row :gutter="20">
+         <n-col :span="6" :xs="24">
+            <n-card size="small" class="box-card">
+               <template #header>
                  <div class="clearfix">
                    <span>个人信息</span>
                  </div>
@@ -39,11 +39,11 @@
                      </li>
                   </ul>
                </div>
-            </el-card>
-         </el-col>
-         <el-col :span="18" :xs="24">
-            <el-card>
-               <template v-slot:header>
+            </n-card>
+         </n-col>
+         <n-col :span="18" :xs="24">
+            <n-card size="small">
+               <template #header>
                  <div class="clearfix">
                    <span>基本资料</span>
                  </div>
@@ -56,9 +56,9 @@
                      <resetPwd />
                   </el-tab-pane>
                </el-tabs>
-            </el-card>
-         </el-col>
-      </el-row>
+            </n-card>
+         </n-col>
+      </n-row>
    </div>
 </template>
 

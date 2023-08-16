@@ -4,7 +4,7 @@
       v-model:value="currentTag"
       type="card"
       closable
-      @close="closeSelectedTag"
+      @close="closeSelectedTagPath"
       size="small"
     >
       <n-tab
@@ -22,24 +22,6 @@
         </n-space>
       </n-tab>
     </n-tabs>
-    <!-- <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
-      <router-link
-        v-for="tag in visitedViews"
-        :key="tag.path"
-        :data-path="tag.path"
-        :class="isActive(tag) ? 'active' : ''"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        class="tags-view-item"
-        :style="activeStyle(tag)"
-        @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)"
-      >
-        {{ tag.title }}
-        <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)">
-          <close class="el-icon-close" style="width: 1em; height: 1em;vertical-align: middle;" />
-        </span>
-      </router-link>
-    </scroll-pane> -->
     <n-dropdown
       placement="bottom-start"
       trigger="manual"
@@ -272,19 +254,14 @@ function refreshSelectedTag(view) {
     useTagsViewStore().delIframeView(route);
   }
 }
-// function handleClose(name) {
-//   const { value: panels } = panelsRef;
-//   if (panels.length === 1) {
-//     message.error("最后一个了");
-//     return;
-//   }
-//   message.info("关掉 " + name);
-//   const index = panels.findIndex((v) => name === v);
-//   panels.splice(index, 1);
-//   if (nameRef.value === name) {
-//     nameRef.value = panels[index];
-//   }
-// }
+function closeSelectedTagPath(path) {
+  const view = visitedViews.value.filter(i => i.fullPath === path)[0]
+  proxy.$tab.closePage(view).then(({ visitedViews }) => {
+    if (isActive(view)) {
+      toLastView(visitedViews, view)
+    }
+  })
+}
 function closeSelectedTag(view) {
   proxy.$tab.closePage(view).then(({ visitedViews }) => {
     if (isActive(view)) {
@@ -336,18 +313,18 @@ function toLastView(visitedViews, view) {
   }
 }
 function openMenu(tag, e) {
-  const menuMinWidth = 105
-  // const offsetLeft = proxy.$el.getBoundingClientRect().left // container margin left
-  const offsetLeft = e.clientX // container margin left
-  const offsetWidth = proxy.$el.offsetWidth // container width
-  const maxLeft = offsetWidth - menuMinWidth // left boundary
-  const l = e.clientX - offsetLeft + 15 // 15: margin right
+  // const menuMinWidth = 105
+  // // const offsetLeft = proxy.$el.getBoundingClientRect().left // container margin left
+  // const offsetLeft = e.clientX // container margin left
+  // const offsetWidth = proxy.$el.offsetWidth // container width
+  // const maxLeft = offsetWidth - menuMinWidth // left boundary
+  // const l = e.clientX - offsetLeft + 15 // 15: margin right
 
-  if (l > maxLeft) {
-    left.value = maxLeft
-  } else {
-    left.value = l
-  }
+  // if (l > maxLeft) {
+  //   left.value = maxLeft
+  // } else {
+  //   left.value = l
+  // }
   left.value = e.clientX
   top.value = e.clientY
   visible.value = true
@@ -362,7 +339,7 @@ function handleScroll() {
 </script>
 
 <style lang='scss' scoped>
-.tags-view-container {
+/* .tags-view-container {
   padding-left: 10px;
   .tags-view-wrapper {
     .tags-view-item {
@@ -401,12 +378,15 @@ function handleScroll() {
       }
     }
   }
-}
+} */
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
+:deep .n-tabs-scroll-padding {
+  width: 10px!important;
+}
 //reset element css of el-icon-close
-.tags-view-wrapper {
+/* .tags-view-wrapper {
   .tags-view-item {
     .el-icon-close {
       width: 16px;
@@ -429,5 +409,5 @@ function handleScroll() {
       }
     }
   }
-}
+} */
 </style>

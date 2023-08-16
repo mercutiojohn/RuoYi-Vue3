@@ -18,9 +18,13 @@ const theme = computed(() => settingsStore.theme);
 const themeOverrides = {
   common: {
     primaryColor: '#409EFF',
+    borderRadius: "8px"
   },
   Input: {
     borderRadius: "8px"
+  },
+  Card: {
+    borderRadius: "10px"
   },
   Button: {
     textColor: "#000000",

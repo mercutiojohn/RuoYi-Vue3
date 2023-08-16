@@ -1,105 +1,169 @@
 <template>
-  <div px-16 py-16 text-left class="app-container home">
-    <i i-logos-unocss text-20 inline-block />
-    <p mt-15 text-10 font-bold color-gray-400>
-      若依 x UnoCSS
-    </p>
-    <p>
-      一直想做一款后台管理系统，看了很多优秀的开源项目但是发现没有合适自己的。于是利用空闲休息时间开始自己写一套后台系统。如此有了若依管理系统，她可以用于所有的Web应用程序，如网站管理后台，网站会员中心，CMS，CRM，OA等等，当然，您也可以对她进行深度定制，以做出更强系统。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能.
-    </p>
-    <p>
-      <b>当前版本:</b> <span>v{{ version }}</span>
-    </p>
-    <p>
-      <el-tag type="danger">&yen;免费开源</el-tag>
-    </p>
-    <p>
-      <el-button
-        type="primary"
-        icon="Cloudy"
-        plain
-        @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"
-        >访问码云</el-button
-      >
-      <el-button icon="HomeFilled" plain @click="goTarget('http://ruoyi.vip')"
-        >访问主页</el-button
-      >
-    </p>
-    <h2>技术选型</h2>
-    <h4>后端技术</h4>
-    <ul>
-      <li>SpringBoot</li>
-      <li>Spring Security</li>
-      <li>JWT</li>
-      <li>MyBatis</li>
-      <li>Druid</li>
-      <li>Fastjson</li>
-      <li>...</li>
-    </ul>
-    <h4>前端技术</h4>
-    <ul>
-      <li>Vue</li>
-      <li>Pinia</li>
-      <li>Element-plus</li>
-      <li>UnoCSS</li>
-      <li>Axios</li>
-      <li>Scss</li>
-      <li>Quill</li>
-      <li>...</li>
-    </ul>
-    <p text-16 mt-15 inline-flex gap-10>
-      <i @click="toggleDark()" icon-btn dark:i-carbon-moon i-carbon-sun />
-      <a
-        icon-btn
-        i-carbon-logo-github
-        href="https://github.com/zclzone"
-        target="_blank"
-        title="GitHub"
-      />
-    </p>
-    <el-card class="update-log">
-      <template v-slot:header>
-        <div class="clearfix">
-          <span>联系信息</span>
-        </div>
-      </template>
-      <div class="body">
-        <p>
-          <i class="el-icon-s-promotion"></i> 官网：<el-link
-            href="http://www.ruoyi.vip"
-            target="_blank"
-            >http://www.ruoyi.vip</el-link
-          >
-        </p>
-        <p>
-          <i class="el-icon-user-solid"></i> QQ群：<s> 满937441 </s>
-          <s> 满887144332 </s> <s> 满180251782 </s> <s> 满104180207 </s>
-          <s> 满186866453 </s> <s> 满201396349 </s> <s> 满101456076 </s>
-          <s> 满101539465 </s> <s> 满264312783 </s> <s> 满167385320 </s>
-          <s> 满104748341 </s> <s> 满160110482 </s> <s> 满170801498 </s>
-          <s> 满108482800 </s> <s> 满101046199 </s> <s> 满136919097 </s>
-          <a
-            href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0vBbSb0ztbBgVtn3kJS-Q4HUNYwip89G&authKey=8irq5PhutrZmWIvsUsklBxhj57l%2F1nOZqjzigkXZVoZE451GG4JHPOqW7AW6cf0T&noverify=0&group_code=143961921"
-            target="_blank"
-            >143961921</a
-          >
-        </p>
-        <p>
-          <i class="el-icon-chat-dot-round"></i> 微信：<a href="javascript:;"
-            >/ *若依</a
-          >
-        </p>
-        <p>
-          <i class="el-icon-money"></i> 支付宝：<a
-            href="javascript:;"
-            class="支付宝信息"
-            >/ *若依</a
-          >
-        </p>
-      </div>
-    </el-card>
-    <el-card class="update-log">
-      <template v-slot:header>
+  <n-layout embedded px-16 py-16 text-left class="app-container home">
+    <div>
+      <n-space align="center" :size="20" justify="center">
+        <svg-icon
+          icon-class="ruoyi"
+          inline-block
+          important-w-30
+          important-h-30
+        />
+        <i
+          i-fluent-dismiss-20-filled
+          text-10
+          class="text-gray-500"
+          inline-block
+        />
+        <i i-logos-unocss text-20 inline-block />
+        <i
+          i-fluent-dismiss-20-filled
+          text-10
+          class="text-gray-500"
+          inline-block
+        />
+        <i i-logos-naiveui text-20 inline-block />
+      </n-space>
+      <p mt-15 text-10 font-bold color-gray-400 class="text-center">
+        若依
+        <i i-fluent-dismiss-20-filled text-5 inline-block />
+        UnoCSS
+        <i i-fluent-dismiss-20-filled text-5 inline-block />
+        Naive UI
+      </p>
+      <p>
+        一直想做一款后台管理系统，看了很多优秀的开源项目但是发现没有合适自己的。于是利用空闲休息时间开始自己写一套后台系统。如此有了若依管理系统，她可以用于所有的Web应用程序，如网站管理后台，网站会员中心，CMS，CRM，OA等等，当然，您也可以对她进行深度定制，以做出更强系统。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能.
+      </p>
+      <p>
+        <b>当前版本:</b> <span>v{{ version }}</span>
+      </p>
+      <p>
+        <el-tag type="danger">&yen;免费开源</el-tag>
+      </p>
+      <p>
+        <el-button
+          type="primary"
+          icon="Cloudy"
+          plain
+          @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"
+          >访问码云</el-button
+        >
+        <el-button icon="HomeFilled" plain @click="goTarget('http://ruoyi.vip')"
+          >访问主页</el-button
+        >
+      </p>
+    </div>
+    <n-grid
+      cols="1 s:1 m:1 l:3 xl:3 2xl:3"
+      x-gap="10"
+      y-gap="10"
+      responsive="screen"
+    >
+      <n-grid-item>
+        <n-card>
+          <template #header>
+            <span>技术选型</span>
+          </template>
+          <n-grid cols="2" x-gap="10">
+            <n-grid-item>
+              <n-card embedded :bordered="false">
+                <template #header>
+                  <span>后端技术</span>
+                </template>
+                <ul>
+                  <li>SpringBoot</li>
+                  <li>Spring Security</li>
+                  <li>JWT</li>
+                  <li>MyBatis</li>
+                  <li>Druid</li>
+                  <li>Fastjson</li>
+                  <li>...</li>
+                </ul>
+              </n-card>
+            </n-grid-item>
+            <n-grid-item>
+              <n-card embedded :bordered="false">
+                <template #header>
+                  <span>前端技术</span>
+                </template>
+                <ul>
+                  <li>Vue</li>
+                  <li>Pinia</li>
+                  <li>Element-plus</li>
+                  <li>UnoCSS</li>
+                  <li>Axios</li>
+                  <li>Scss</li>
+                  <li>Quill</li>
+                  <li>...</li>
+                </ul>
+              </n-card>
+            </n-grid-item>
+          </n-grid>
+        </n-card>
+      </n-grid-item>
+      <n-grid-item>
+        <n-card class="update-log">
+          <template #header>
+            <span>联系信息</span>
+          </template>
+          <div class="body">
+            <p>
+              <i class="el-icon-s-promotion"></i> 官网：<el-link
+                href="http://www.ruoyi.vip"
+                target="_blank"
+                >http://www.ruoyi.vip</el-link
+              >
+            </p>
+            <p>
+              <i class="el-icon-user-solid"></i> QQ群：<s> 满937441 </s>
+              <s> 满887144332 </s> <s> 满180251782 </s> <s> 满104180207 </s>
+              <s> 满186866453 </s> <s> 满201396349 </s> <s> 满101456076 </s>
+              <s> 满101539465 </s> <s> 满264312783 </s> <s> 满167385320 </s>
+              <s> 满104748341 </s> <s> 满160110482 </s> <s> 满170801498 </s>
+              <s> 满108482800 </s> <s> 满101046199 </s> <s> 满136919097 </s>
+              <a
+                href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0vBbSb0ztbBgVtn3kJS-Q4HUNYwip89G&authKey=8irq5PhutrZmWIvsUsklBxhj57l%2F1nOZqjzigkXZVoZE451GG4JHPOqW7AW6cf0T&noverify=0&group_code=143961921"
+                target="_blank"
+                >143961921</a
+              >
+            </p>
+            <p>
+              <i class="el-icon-chat-dot-round"></i> 微信：<a
+                href="javascript:;"
+                >/ *若依</a
+              >
+            </p>
+            <p>
+              <i class="el-icon-money"></i> 支付宝：<a
+                href="javascript:;"
+                class="支付宝信息"
+                >/ *若依</a
+              >
+            </p>
+          </div>
+        </n-card>
+      </n-grid-item>
+      <n-grid-item>
+        <n-card class="update-log">
+          <template #header>
+            <div class="clearfix">
+              <span>捐赠支持</span>
+            </div>
+          </template>
+          <div class="body">
+            <img
+              src="@/assets/images/pay.png"
+              alt="donate"
+              style="width: 100%"
+            />
+            <span style="display: inline-block; height: 30px; line-height: 30px"
+              >你可以请作者喝杯咖啡表示鼓励</span
+            >
+          </div>
+        </n-card>
+      </n-grid-item>
+    </n-grid>
+    <n-card class="update-log">
+      <template #header>
         <div class="clearfix">
           <span>更新日志</span>
         </div>
@@ -675,7 +739,6 @@
             <li>其他细节优化</li>
           </ol>
         </el-collapse-item>
-
         <el-collapse-item title="v3.1.0 - 2020-08-13">
           <ol>
             <li>表格工具栏右侧添加刷新&显隐查询组件</li>
@@ -705,7 +768,6 @@
             <li>其他细节优化</li>
           </ol>
         </el-collapse-item>
-
         <el-collapse-item title="v3.0.0 - 2020-07-20">
           <ol>
             <li>单应用调整为多模块项目</li>
@@ -743,7 +805,6 @@
             <li>其他细节优化</li>
           </ol>
         </el-collapse-item>
-
         <el-collapse-item title="v2.3.0 - 2020-06-01">
           <ol>
             <li>升级fastjson到最新版1.2.70 修复高危安全漏洞</li>
@@ -797,7 +858,6 @@
             <li>其他细节优化</li>
           </ol>
         </el-collapse-item>
-
         <el-collapse-item title="v2.2.0 - 2020-03-18">
           <ol>
             <li>系统监控新增定时任务功能</li>
@@ -820,7 +880,6 @@
             <li>其他细节优化</li>
           </ol>
         </el-collapse-item>
-
         <el-collapse-item title="v2.1.0 - 2020-02-24">
           <ol>
             <li>新增表单构建</li>
@@ -848,7 +907,6 @@
             <li>其他细节优化</li>
           </ol>
         </el-collapse-item>
-
         <el-collapse-item title="v2.0.0 - 2019-12-02">
           <ol>
             <li>新增代码生成</li>
@@ -884,93 +942,8 @@
           </ol>
         </el-collapse-item>
       </el-collapse>
-    </el-card>
-    <el-card class="update-log">
-      <template v-slot:header>
-        <div class="clearfix">
-          <span>捐赠支持</span>
-        </div>
-      </template>
-      <div class="body">
-        <img src="@/assets/images/pay.png" alt="donate" style="width: 100%" />
-        <span style="display: inline-block; height: 30px; line-height: 30px"
-          >你可以请作者喝杯咖啡表示鼓励</span
-        >
-      </div>
-    </el-card>
-    <section
-      mt-20
-      w-360
-      mx-auto
-      flex
-      flex-wrap
-      justify-around
-      p-10
-      card-shadow
-      rounded-10
-      dark:b
-    >
-      <div w-50 h-50 b-1 rounded-5 f-c-c p-10 m-20>
-        <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-      </div>
-      <div w-50 h-50 b-1 rounded-5 flex justify-between p-10 m-20>
-        <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        <span w-6 h-6 rounded-3 self-end bg-black dark:bg-white />
-      </div>
-      <div w-50 h-50 b-1 rounded-5 flex justify-between p-10 m-20>
-        <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        <span w-6 h-6 rounded-3 self-center bg-black dark:bg-white />
-        <span w-6 h-6 rounded-3 self-end bg-black dark:bg-white />
-      </div>
-      <div w-50 h-50 b-1 rounded-5 flex justify-between p-10 m-20>
-        <div flex-col justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-        <div flex-col justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-      </div>
-      <div
-        w-50
-        h-50
-        b-1
-        rounded-5
-        flex-col
-        justify-between
-        items-center
-        p-10
-        m-20
-      >
-        <div flex w-full justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-        <div w-6 h-6 rounded-3 bg-black dark:bg-white />
-        <div flex w-full justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-      </div>
-      <div w-50 h-50 b-1 rounded-5 flex-col justify-between p-10 m-20>
-        <div flex w-full justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-        <div flex w-full justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-        <div flex w-full justify-between>
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-          <span w-6 h-6 rounded-3 bg-black dark:bg-white />
-        </div>
-      </div>
-    </section>
-
-    <p mt-20 text-14 color-gray-400>Flex骰子</p>
-  </div>
+    </n-card>
+  </n-layout>
 </template>
 
 <script setup name="Index">

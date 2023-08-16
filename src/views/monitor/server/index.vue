@@ -1,17 +1,20 @@
 <template>
   <n-layout embedded class="app-container">
-    <el-row>
-      <el-col :span="12" class="card-box">
-        <n-space vertical :size="20">
+    <n-row :gutter="[8, 8]">
+      <n-col :span="12" class="card-box">
+        <n-space vertical :size="8">
           <n-card size="small">
             <template #header>
-              <Cpu style="width: 1em; height: 1em; vertical-align: middle" />CPU
-              <n-statistic
-                label="核心数"
-                :value="server.cpu.cpuNum"
-                v-if="server.cpu"
-              >
-              </n-statistic>
+              <n-space justify="space-between">
+                <div class="title">
+                  <Cpu style="width: 1em; height: 1em; vertical-align: middle" />CPU
+                </div>
+                <n-descriptions label-placement="top" v-if="server.cpu">
+                  <n-descriptions-item label="核心数">
+                    {{ server.cpu.cpuNum }}
+                  </n-descriptions-item>
+                </n-descriptions>
+              </n-space>
             </template>
             <n-space vertical :size="10" v-if="server.cpu">
               <n-grid x-gap="20" y-gap="15" :cols="3">
@@ -44,7 +47,21 @@
               ><Monitor style="width: 1em; height: 1em; vertical-align: middle" />
               <span style="vertical-align: middle">服务器信息</span></template
             >
-            <div class="el-table el-table--enable-row-hover el-table--medium">
+            <n-descriptions label-placement="top" v-if="server.sys">
+              <n-descriptions-item label="服务器名称">
+                {{ server.sys.computerName }}
+              </n-descriptions-item>
+              <n-descriptions-item label="操作系统">
+                {{ server.sys.osName }}
+              </n-descriptions-item>
+              <n-descriptions-item label="服务器IP">
+                {{ server.sys.computerIp }}
+              </n-descriptions-item>
+              <n-descriptions-item label="系统架构">
+                {{ server.sys.osArch }}
+              </n-descriptions-item>
+            </n-descriptions>
+            <!-- <div class="el-table el-table--enable-row-hover el-table--medium">
               <table cellspacing="0" style="width: 100%">
                 <tbody>
                   <tr>
@@ -85,12 +102,12 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div> -->
           </n-card>
         </n-space>
-      </el-col>
+      </n-col>
 
-      <el-col :span="12" class="card-box">
+      <n-col :span="12" class="card-box">
         <n-card size="small">
           <template #header>
             <Tickets style="width: 1em; height: 1em; vertical-align: middle" />
@@ -164,9 +181,9 @@
             </n-card>
           </n-space>
         </n-card>
-      </el-col>
+      </n-col>
 
-      <el-col :span="24" class="card-box">
+      <n-col :span="24" class="card-box">
         <n-card size="small">
           <template #header
             ><CoffeeCup
@@ -174,7 +191,30 @@
             />
             <span style="vertical-align: middle">Java虚拟机信息</span></template
           >
-          <div class="el-table el-table--enable-row-hover el-table--medium">
+          <n-descriptions label-placement="top" v-if="server.jvm">
+            <n-descriptions-item label="Java名称">
+              {{ server.jvm.name }}
+            </n-descriptions-item>
+            <n-descriptions-item label="Java版本">
+              {{ server.jvm.version }}
+            </n-descriptions-item>
+            <n-descriptions-item label="启动时间">
+              {{ server.jvm.startTime }}
+            </n-descriptions-item>
+            <n-descriptions-item label="运行时长">
+              {{ server.jvm.runTime }}
+            </n-descriptions-item>
+            <n-descriptions-item label="安装路径">
+              {{ server.jvm.home }}
+            </n-descriptions-item>
+            <n-descriptions-item label="项目路径" v-if="server.sys">
+              {{ server.sys.userDir }}
+            </n-descriptions-item>
+            <n-descriptions-item label="运行参数">
+              <n-code :code="server.jvm.inputArgs" language="shell" inline />
+            </n-descriptions-item>
+          </n-descriptions>
+          <!-- <div class="el-table el-table--enable-row-hover el-table--medium">
             <table cellspacing="0" style="width: 100%; table-layout: fixed">
               <tbody>
                 <tr>
@@ -245,11 +285,11 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+          </div> -->
         </n-card>
-      </el-col>
+      </n-col>
 
-      <el-col :span="24" class="card-box">
+      <n-col :span="24" class="card-box">
         <n-card size="small">
           <template #header
             ><MessageBox
@@ -317,8 +357,8 @@
             </table>
           </div>
         </n-card>
-      </el-col>
-    </el-row>
+      </n-col>
+    </n-row>
   </n-layout>
 </template>
 

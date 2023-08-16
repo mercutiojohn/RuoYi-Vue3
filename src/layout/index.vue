@@ -10,14 +10,14 @@
       <!--  :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" -->
       <n-layout class="main-container children:flex children:flex-col">
         <!-- :class="{ 'fixed-header': fixedHeader }" -->
-        <n-layout-header class="flex-shrink-0" bordered>
+        <n-layout-header class="flex-shrink-0" :bordered="!needTagsView">
           <navbar @setLayout="setLayout" />
           <tags-view v-if="needTagsView" />
         </n-layout-header>
         <n-layout class="h-full flex-shrink" :native-scrollbar="false">
           <app-main />
         </n-layout>
-        <n-layout-footer style="padding: 5px 10px" bordered> 城府路 </n-layout-footer>
+        <n-layout-footer style="padding: 5px 10px" bordered> Mercutio </n-layout-footer>
       </n-layout>
     </n-layout>
   </div>

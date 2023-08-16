@@ -5,6 +5,7 @@
     :width="240"
     :native-scrollbar="false"
     :collapsed="isCollapse"
+    :inverted="sideTheme === 'theme-dark'"
     show-trigger="bar"
     :trigger-style="{
       opacity: hovered ? 1 : 0,
@@ -20,10 +21,10 @@
     @mouseleave="hideTrigger"
     :style="{
       padding: 0,
-      backgroundColor:
-        sideTheme === 'theme-dark'
-          ? variables.menuBackground
-          : variables.menuLightBackground,
+      // backgroundColor:
+      //  sideTheme === 'theme-dark'
+      //    ? variables.menuBackground
+      //    : variables.menuLightBackground,
     }"
     :content-style="{
       padding: 0
@@ -33,8 +34,9 @@
   <div
     :class="{ 'has-logo': showLogo }"
   >
-    <logo v-if="showLogo" :collapse="isCollapse" />
+    <logo v-if="showLogo" :collapse="isCollapse" sticky top-0 z-2 mr-0.25 class="bg-$n-color logo-transition"/>
     <n-menu 
+        :inverted="sideTheme === 'theme-dark'"
         :options="menuOptions" 
         @update:value="handleUpdateValue"
         :collapsed="isCollapse"
@@ -136,7 +138,9 @@ function handleUpdateValue(key, item) {
 
 const home = sidebarRouters.value.filter((item) => item.path === '' && item.redirect === '/index')[0].children[0]
 console.log('hello', home)
-const menuOptions = [
+const menuOptions = computed(() => {
+  console.log('refreshed')
+  return [
   {
     label: () =>
       h(
@@ -160,7 +164,9 @@ const menuOptions = [
       },
     },
   },
-];
+  ...daddyLayerOptions.value
+]
+});
 
 function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
   sidebarLayerRouters.forEach((item) => {
@@ -209,8 +215,16 @@ function renderMenu(sidebarLayerRouters, menuLayerOptions, parentPath = "") {
   });
 }
 
-renderMenu(sidebarRouters.value, menuOptions);
+const daddyLayerOptions = ref([])
 
+renderMenu(sidebarRouters.value, daddyLayerOptions.value);
+
+watch(
+  () => sidebarRouters,
+  (newVal, oldVal) => {
+    renderMenu(newVal.value, daddyLayerOptions.value);
+  }
+)
 const activeMenu = computed(() => {
   const { meta, path } = route;
   // if set path, the sidebar will highlight the path you set
@@ -220,3 +234,8 @@ const activeMenu = computed(() => {
   return path;
 });
 </script>
+<style scoped>
+.logo-transition {
+  transition: all .3s var(--n-bezier);
+}
+</style>

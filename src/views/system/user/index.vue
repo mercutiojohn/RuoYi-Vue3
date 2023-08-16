@@ -1,19 +1,34 @@
 <template>
    <div class="app-container">
-      <el-row :gutter="20">
+      <n-row :gutter="20">
          <!--部门数据-->
-         <el-col :span="4" :xs="24">
+         <n-col :span="4" :xs="24">
             <div class="head-container">
-               <el-input
+               <n-input
                   v-model="deptName"
                   placeholder="请输入部门名称"
                   clearable
                   prefix-icon="Search"
                   style="margin-bottom: 20px"
-               />
+               >
+                  <template #prefix>
+                     <i i-fluent-search-12-regular />
+                  </template>
+               </n-input>
             </div>
             <div class="head-container">
-               <el-tree
+               <!-- node-key="id"
+                  highlight-current
+               -->
+               <n-tree
+                  :data="deptOptions"
+                  :filter="filterNode"
+                  :expand-on-click="false"
+                  ref="deptTreeRef2"
+                  :node-props="nodeProps"
+                  default-expand-all
+               />
+               <!-- <el-tree
                   :data="deptOptions"
                   :props="{ label: 'label', children: 'children' }"
                   :expand-on-click-node="false"
@@ -23,65 +38,75 @@
                   highlight-current
                   default-expand-all
                   @node-click="handleNodeClick"
-               />
+               /> -->
             </div>
-         </el-col>
+         </n-col>
          <!--用户数据-->
-         <el-col :span="20" :xs="24">
-            <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-               <el-form-item label="用户名称" prop="userName">
-                  <el-input
-                     v-model="queryParams.userName"
-                     placeholder="请输入用户名称"
-                     clearable
-                     style="width: 240px"
-                     @keyup.enter="handleQuery"
-                  />
-               </el-form-item>
-               <el-form-item label="手机号码" prop="phonenumber">
-                  <el-input
-                     v-model="queryParams.phonenumber"
-                     placeholder="请输入手机号码"
-                     clearable
-                     style="width: 240px"
-                     @keyup.enter="handleQuery"
-                  />
-               </el-form-item>
-               <el-form-item label="状态" prop="status">
-                  <el-select
-                     v-model="queryParams.status"
-                     placeholder="用户状态"
-                     clearable
-                     style="width: 240px"
-                  >
-                     <el-option
-                        v-for="dict in sys_normal_disable"
-                        :key="dict.value"
-                        :label="dict.label"
-                        :value="dict.value"
+         <n-col :span="20" :xs="24">
+            <n-collapse-transition :show="showSearch">
+               <n-form
+                  :model="queryParams" 
+                  ref="queryRef" 
+                  :inline="true"
+               >
+                  <n-form-item label="用户名称" prop="userName">
+                     <n-input 
+                        v-model:value="queryParams.userName" 
+                        placeholder="请输入用户名称"
+                        clearable
+                        @keyup.enter="handleQuery"
                      />
-                  </el-select>
-               </el-form-item>
-               <el-form-item label="创建时间" style="width: 308px;">
-                  <el-date-picker
-                     v-model="dateRange"
-                     value-format="YYYY-MM-DD"
-                     type="daterange"
-                     range-separator="-"
-                     start-placeholder="开始日期"
-                     end-placeholder="结束日期"
-                  ></el-date-picker>
-               </el-form-item>
-               <el-form-item>
-                  <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-                  <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-               </el-form-item>
-            </el-form>
+                  </n-form-item>
+                  <n-form-item label="手机号码" prop="phonenumber">
+                     <n-input
+                        v-model:value="queryParams.phonenumber"
+                        placeholder="请输入手机号码"
+                        clearable
+                        @keyup.enter="handleQuery"
+                     />
+                  </n-form-item>
+                  <n-form-item label="状态" prop="status">
+                     <n-select 
+                        v-model:value="queryParams.status"
+                        placeholder="用户状态"
+                        clearable
+                        :options="sys_normal_disable" 
+                        class="w-40"
+                     />
+                  </n-form-item>
+                  <n-form-item label="创建时间" style="width: 308px;">
+                     <n-date-picker
+                        v-model:formatted-value="dateRange"
+                        value-format="yyyy-MM-dd"
+                        type="daterange"
+                        separator="-"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        clearable
+                     />
+                  </n-form-item>
+                  <n-form-item>
+                     <n-space>
+                        <n-button type="primary" @click="handleQuery">
+                           <template #icon>
+                              <i class="i-fluent-search-12-regular" />
+                           </template>
+                           搜索
+                        </n-button>
+                        <n-button @click="resetQuery">
+                           <template #icon>
+                              <i class="i-fluent-share-screen-stop-16-regular" />
+                           </template>
+                           重置
+                        </n-button>
+                     </n-space>
+                  </n-form-item>
+               </n-form>
+            </n-collapse-transition>
 
-            <n-space>
+            <n-space class="pb-2">
                <n-button 
                   type="primary"
-                  secondary
                   @click="handleAdd"
                   v-hasPermi="['system:user:add']"
                >
@@ -136,7 +161,7 @@
                :data="userList"
                :pagination="pagination"
                :row-key="rowKey"
-               @update:checked-row-keys="handleCheck"
+               @update:checked-row-keys="handleSelectionChange"
             />
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
@@ -184,19 +209,19 @@
                v-model:limit="queryParams.pageSize"
                @pagination="getList"
             />
-         </el-col>
-      </el-row>
+         </n-col>
+      </n-row>
 
       <!-- 添加或修改用户配置对话框 -->
       <el-dialog :title="title" v-model="open" width="600px" append-to-body>
          <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
-            <el-row>
-               <el-col :span="12">
+            <n-row>
+               <n-col :span="12">
                   <el-form-item label="用户昵称" prop="nickName">
                      <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
                   </el-form-item>
-               </el-col>
-               <el-col :span="12">
+               </n-col>
+               <n-col :span="12">
                   <el-form-item label="归属部门" prop="deptId">
                      <el-tree-select
                         v-model="form.deptId"
@@ -207,34 +232,34 @@
                         check-strictly
                      />
                   </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="12">
+               </n-col>
+            </n-row>
+            <n-row>
+               <n-col :span="12">
                   <el-form-item label="手机号码" prop="phonenumber">
                      <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
                   </el-form-item>
-               </el-col>
-               <el-col :span="12">
+               </n-col>
+               <n-col :span="12">
                   <el-form-item label="邮箱" prop="email">
                      <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
                   </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="12">
+               </n-col>
+            </n-row>
+            <n-row>
+               <n-col :span="12">
                   <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
                      <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
                   </el-form-item>
-               </el-col>
-               <el-col :span="12">
+               </n-col>
+               <n-col :span="12">
                   <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
                      <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
                   </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="12">
+               </n-col>
+            </n-row>
+            <n-row>
+               <n-col :span="12">
                   <el-form-item label="用户性别">
                      <el-select v-model="form.sex" placeholder="请选择">
                         <el-option
@@ -245,8 +270,8 @@
                         ></el-option>
                      </el-select>
                   </el-form-item>
-               </el-col>
-               <el-col :span="12">
+               </n-col>
+               <n-col :span="12">
                   <el-form-item label="状态">
                      <el-radio-group v-model="form.status">
                         <el-radio
@@ -256,10 +281,10 @@
                         >{{ dict.label }}</el-radio>
                      </el-radio-group>
                   </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="12">
+               </n-col>
+            </n-row>
+            <n-row>
+               <n-col :span="12">
                   <el-form-item label="岗位">
                      <el-select v-model="form.postIds" multiple placeholder="请选择">
                         <el-option
@@ -271,8 +296,8 @@
                         ></el-option>
                      </el-select>
                   </el-form-item>
-               </el-col>
-               <el-col :span="12">
+               </n-col>
+               <n-col :span="12">
                   <el-form-item label="角色">
                      <el-select v-model="form.roleIds" multiple placeholder="请选择">
                         <el-option
@@ -284,15 +309,15 @@
                         ></el-option>
                      </el-select>
                   </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="24">
+               </n-col>
+            </n-row>
+            <n-row>
+               <n-col :span="24">
                   <el-form-item label="备注">
                      <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
                   </el-form-item>
-               </el-col>
-            </el-row>
+               </n-col>
+            </n-row>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
@@ -347,6 +372,8 @@ const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict("sys_normal_disable", "sys_user_sex");
 
+const message = useMessage()
+
 const userList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -356,7 +383,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const dateRange = ref([]);
+const dateRange = ref(null);
 const deptName = ref("");
 const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
@@ -399,6 +426,16 @@ const columnsTest = computed(() => [
     key: "address"
   }
 ])
+
+// 树节点操作定义
+const nodeProps = ({ option }) => {
+   return {
+      onClick() {
+         handleNodeClick(option)
+         // message.info("[Click] " + option.label);
+      }
+   };
+}
 
 // 列显隐信息
 const columns = ref([
@@ -512,9 +549,19 @@ watch(deptName, val => {
 /** 查询部门下拉树结构 */
 function getDeptTree() {
   deptTreeSelect().then(response => {
+   addKey(response.data)
     deptOptions.value = response.data;
   });
 };
+/** 树节点添加 Key */
+function addKey(node) {
+   node.forEach((item)=>{
+      item.key = item.id;
+      if (!!item.children) {
+         addKey(item.children)
+      }
+   })
+}
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
@@ -536,10 +583,12 @@ function handleQuery() {
 };
 /** 重置按钮操作 */
 function resetQuery() {
-  dateRange.value = [];
+  dateRange.value = null;
+  
   proxy.resetForm("queryRef");
   queryParams.value.deptId = undefined;
-  proxy.$refs.deptTreeRef.setCurrentKey(null);
+//   proxy.$refs.deptTreeRef.setCurrentKey(null);
+  proxy.$refs.deptTreeRef.restoreValidation();
   handleQuery();
 };
 /** 删除按钮操作 */
