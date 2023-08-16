@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme-overrides="themeOverrides">
+  <n-config-provider :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN" :theme="useDark ? darkTheme : undefined">
     <n-message-provider>
       <router-view />
       <n-global-style /> <!-- TODO -->
@@ -12,8 +12,12 @@ import useSettingsStore from "@/store/modules/settings";
 import { handleThemeStyle } from "@/utils/theme";
 import { NConfigProvider, NMessageProvider, NGlobalStyle } from "naive-ui";
 import { defineComponent } from "vue";
+import { zhCN, dateZhCN } from 'naive-ui'
+import { darkTheme } from 'naive-ui'
 
 const theme = computed(() => settingsStore.theme);
+
+const useDark = false;
 
 const themeOverrides = {
   common: {
@@ -71,6 +75,9 @@ export default defineComponent({
     });
     return {
       themeOverrides,
+      zhCN,
+      dateZhCN,
+      darkTheme
     };
   },
 });
